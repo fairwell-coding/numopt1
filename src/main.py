@@ -76,20 +76,37 @@ def task1():
 def __plot_1d(ax, x1, x2):
     ax[1, 1].contour(x1, x2, alpha * x1 ** 2 - 2 * x1 + beta * x2 ** 2, 50)
     ax[1, 1].plot(1 / alpha, 0, color='red', marker="x", markersize=8)
+    delta = 0.2
+    ax[1, 1].annotate("P(1/alpha| 0)", (0 + delta, 0 + delta), color='red')
 
 
 def __plot_1c(ax, x1, x2):
     ax[1, 0].contour(x1, x2, x1 ** 2 + x1 * (x1 ** 2 + x2 ** 2) ** 0.5 + (x1 ** 2 + x2 ** 2) ** 0.5, 50)
-    ax[1, 0].plot(0, 0, color='red', marker="x", markersize=8)
+    delta = 0.2
+
     ax[1, 0].plot(-1, 1, color='red', marker="x", markersize=8)
+    ax[1, 0].annotate("P1(-1|1) = saddle point", (-1 + delta, 1 + delta), color='red')
+
     ax[1, 0].plot(-1, -1, color='red', marker="x", markersize=8)
+    ax[1, 0].annotate("P2(-1|-1) = saddle point", (-1 + delta, -1 + delta), color='red')
+
+    ax[1, 0].plot(0, 0, color='red', marker="x", markersize=8)
+    ax[1, 0].annotate("P3(0|0) = local minima", (0 + delta, 0 + delta), color='red')
 
 
 def __plot_1b(ax, x1, x2):
     ax[0, 1].contour(x1, x2, (x1 - 2) ** 2 + x1 * x2 ** 2 - 2, 50)
-    ax[0, 1].plot(0, 2, color='red', marker="x", markersize=8)
-    ax[0, 1].plot(0, -2, color='red', marker="x", markersize=8)
+
+    delta = 0.2
+
     ax[0, 1].plot(2, 0, color='red', marker="x", markersize=8)
+    ax[0, 1].annotate("P1(2|0)", (2 + delta, 0 + delta), color='red')
+
+    ax[0, 1].plot(0, 2, color='red', marker="x", markersize=8)
+    ax[0, 1].annotate("P2(0|2)", (0 + delta, 2 + delta), color='red')
+
+    ax[0, 1].plot(0, -2, color='red', marker="x", markersize=8)
+    ax[0, 1].annotate("P3(0|-2)", (0 + delta, -2 + delta), color='red')
 
 
 def __plot_1a(ax, x1, x2):
@@ -98,6 +115,8 @@ def __plot_1a(ax, x1, x2):
     x = np.linspace(-5, 5)
     y = x / 3 + 5 / 6
     ax[0, 0].plot(x, y, color='red')
+    delta = 1
+    ax[0, 0].annotate("x2 = x1/3 + 5/6", (0, 5/6 + delta), color='red')
 
 
 # Modify the function bodies below to be used for function value and gradient computation
