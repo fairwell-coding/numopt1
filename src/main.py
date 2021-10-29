@@ -63,36 +63,36 @@ def task1():
     """
 
     x1, x2 = np.meshgrid(np.linspace(-5, 5), np.linspace(-5, 5))
-    plot_1a(ax, x1, x2)
-    plot_1b(ax, x1, x2)
-    plot_1c(ax, x1, x2)
-    plot_1d(ax, x1, x2)
+    __plot_1a(ax, x1, x2)
+    __plot_1b(ax, x1, x2)
+    __plot_1c(ax, x1, x2)
+    __plot_1d(ax, x1, x2)
 
     """ End of your code
     """
     return fig
 
 
-def plot_1d(ax, x1, x2):
+def __plot_1d(ax, x1, x2):
     ax[1, 1].contour(x1, x2, alpha * x1 ** 2 - 2 * x1 + beta * x2 ** 2, 50)
     ax[1, 1].plot(1 / alpha, 0, color='red', marker="x", markersize=8)
 
 
-def plot_1c(ax, x1, x2):
+def __plot_1c(ax, x1, x2):
     ax[1, 0].contour(x1, x2, x1 ** 2 + x1 * (x1 ** 2 + x2 ** 2) ** 0.5 + (x1 ** 2 + x2 ** 2) ** 0.5, 50)
     ax[1, 0].plot(0, 0, color='red', marker="x", markersize=8)
     ax[1, 0].plot(-1, 1, color='red', marker="x", markersize=8)
     ax[1, 0].plot(-1, -1, color='red', marker="x", markersize=8)
 
 
-def plot_1b(ax, x1, x2):
+def __plot_1b(ax, x1, x2):
     ax[0, 1].contour(x1, x2, (x1 - 2) ** 2 + x1 * x2 ** 2 - 2, 50)
     ax[0, 1].plot(0, 2, color='red', marker="x", markersize=8)
     ax[0, 1].plot(0, -2, color='red', marker="x", markersize=8)
     ax[0, 1].plot(2, 0, color='red', marker="x", markersize=8)
 
 
-def plot_1a(ax, x1, x2):
+def __plot_1a(ax, x1, x2):
     ax[0, 0].contour(x1, x2, (-x1 + 3 * x2 - 2.5) ** 2, 50)
     # The critical point is undefined (det(Hessian) = 0). The solution of the respective linear system has one degree of freedom, hence for the critical point we get the line: x2 = x1/3 + 5/6
     x = np.linspace(-5, 5)
@@ -109,7 +109,12 @@ def approx_grad_task1(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.
         @return The gradient approximation
     """
     assert (len(x) == 2)
-    pass
+
+    epsilon = 10**-4
+    grad_1 = func([x[0] + epsilon, x[1]]) - func([x[0] - epsilon, x[1]])
+    grad_2 = func([x[0], x[1] + epsilon]) - func([x[0], x[1] - epsilon])
+
+    return np.multiply([grad_1, grad_2], 1 / 2 * epsilon)
 
 
 def approx_grad_task2(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.ndarray:
@@ -140,14 +145,14 @@ def func_1b(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1b) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return (x[0] - 2)**2 + (x[0]*x[1]**2) - 2
 
 
 def grad_1b(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 1b) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return [2*x[0] + x[1]**2 - 4, 2*x[0] * x[1]]
 
 
 def func_1c(x: np.ndarray) -> float:
@@ -256,6 +261,10 @@ def task3():
     bw = 0.3
     ax[0].bar([0 - bw / 2, 1 - bw / 2], [1.5, 1.1], bw)
     ax[0].bar([0 + bw / 2, 1 + bw / 2], [1.5, 1.1], bw)
+
+    x = [0, 0]  # TODO: change hardcoded value for x vector
+    ax[1].bar([0 - bw / 2, 1 - bw / 2], [grad_1b(x)[0], grad_1b(x)[1]], bw)
+    ax[1].bar([0 + bw / 2, 1 + bw / 2], [approx_grad_task1(func_1b, x)[0], approx_grad_task1(func_1b, x)[1]], bw)  # TODO: 1st derivative: analytically = -4 but numerically = -4EE-08 -> 0
 
     """ End of your code
     """
