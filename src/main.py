@@ -131,14 +131,14 @@ def func_1a(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1a) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return x[0]**2 + 5 * x[0] - 6 * x[0] * x[1] + 9 * x[1]**2 - 15 * x[1] + 25/4
 
 
 def grad_1a(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 1a) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return [2 * x[0] - 6 * x[1] + 5, - 6 * x[0] + 18 * x[1] - 15]
 
 
 def func_1b(x: np.ndarray) -> float:
@@ -266,6 +266,9 @@ def task3():
     del_x2_numerical = 1 + width / 2
     analytical_bars = [del_x1_analytical, del_x2_analytical]
     numerical_bars = [del_x1_numerical, del_x2_numerical]
+
+    ax[0].bar(analytical_bars, [grad_1a(x)[0], grad_1a(x)[1]], width)
+    ax[0].bar(numerical_bars, [approx_grad_task1(func_1a, x)[0], approx_grad_task1(func_1a, x)[1]], width)
 
     ax[1].bar(analytical_bars, [grad_1b(x)[0], grad_1b(x)[1]], width)
     ax[1].bar(numerical_bars, [approx_grad_task1(func_1b, x)[0], approx_grad_task1(func_1b, x)[1]], width)
