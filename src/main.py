@@ -173,14 +173,14 @@ def func_1d(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1d) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return alpha * x[0]**2 - 2 * x[0] + beta * x[1]**2
 
 
 def grad_1d(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 1d) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return [2 * alpha * x[0] - 2, 2 * beta * x[1]]
 
 
 def func_2a(x: np.ndarray) -> float:
@@ -272,6 +272,9 @@ def task3():
 
     ax[2].bar(analytical_bars, [grad_1c(x)[0], grad_1c(x)[1]], width)
     ax[2].bar(numerical_bars, [approx_grad_task1(func_1c, x)[0], approx_grad_task1(func_1c, x)[1]], width)
+
+    ax[3].bar(analytical_bars, [grad_1d(x)[0], grad_1d(x)[1]], width)
+    ax[3].bar(numerical_bars, [approx_grad_task1(func_1d, x)[0], approx_grad_task1(func_1d, x)[1]], width)
 
     """ End of your code
     """
