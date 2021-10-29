@@ -114,7 +114,7 @@ def approx_grad_task1(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.
     grad_1 = func([x[0] + epsilon, x[1]]) - func([x[0] - epsilon, x[1]])
     grad_2 = func([x[0], x[1] + epsilon]) - func([x[0], x[1] - epsilon])
 
-    return np.multiply([grad_1, grad_2], 1 / 2 * epsilon)
+    return np.multiply([grad_1, grad_2], 1 / (2 * epsilon))
 
 
 def approx_grad_task2(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.ndarray:
@@ -159,14 +159,14 @@ def func_1c(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1c) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return x[0]**2 + x[0] * (x[0]**2 + x[1]**2) + (x[0]**2 + x[1]**2)
 
 
 def grad_1c(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 1c) at a given point x
         @param x Vector of size (2,)
     """
-    pass
+    return [3 * x[0]**2 + 4 * x[0] + x[1]**2, 2 * x[0] * x[1] + 2 * x[1]]
 
 
 def func_1d(x: np.ndarray) -> float:
@@ -257,14 +257,21 @@ def task3():
     """ Start of your code
     """
 
-    # Example for plot usage
-    bw = 0.3
-    ax[0].bar([0 - bw / 2, 1 - bw / 2], [1.5, 1.1], bw)
-    ax[0].bar([0 + bw / 2, 1 + bw / 2], [1.5, 1.1], bw)
+    x = np.random.randn(2)
 
-    x = [0, 0]  # TODO: change hardcoded value for x vector
-    ax[1].bar([0 - bw / 2, 1 - bw / 2], [grad_1b(x)[0], grad_1b(x)[1]], bw)
-    ax[1].bar([0 + bw / 2, 1 + bw / 2], [approx_grad_task1(func_1b, x)[0], approx_grad_task1(func_1b, x)[1]], bw)  # TODO: 1st derivative: analytically = -4 but numerically = -4EE-08 -> 0
+    width = 0.3
+    del_x1_analytical = 0 - width / 2
+    del_x2_analytical = 1 - width / 2
+    del_x1_numerical = 0 + width / 2
+    del_x2_numerical = 1 + width / 2
+    analytical_bars = [del_x1_analytical, del_x2_analytical]
+    numerical_bars = [del_x1_numerical, del_x2_numerical]
+
+    ax[1].bar(analytical_bars, [grad_1b(x)[0], grad_1b(x)[1]], width)
+    ax[1].bar(numerical_bars, [approx_grad_task1(func_1b, x)[0], approx_grad_task1(func_1b, x)[1]], width)
+
+    ax[2].bar(analytical_bars, [grad_1c(x)[0], grad_1c(x)[1]], width)
+    ax[2].bar(numerical_bars, [approx_grad_task1(func_1c, x)[0], approx_grad_task1(func_1c, x)[1]], width)
 
     """ End of your code
     """
