@@ -20,11 +20,13 @@ from typing import Callable
 
 alpha = 1
 beta = 5
+epsilon = 10 ** -4  # used for 3.1 and 3.2
 
-d = None
-b = None
-D = None
-A = None
+d = 2.5
+n_dim = 5
+b = np.random.rand(n_dim)
+D = np.matrix(np.random.rand(n_dim, n_dim))
+A = np.matrix(np.random.rand(n_dim, n_dim))
 
 """ End of your code
 """
@@ -116,7 +118,7 @@ def __plot_1a(ax, x1, x2):
     y = x / 3 + 5 / 6
     ax[0, 0].plot(x, y, color='red')
     delta = 1
-    ax[0, 0].annotate("x2 = x1/3 + 5/6", (0, 5/6 + delta), color='red')
+    ax[0, 0].annotate("x2 = x1/3 + 5/6", (0, 5 / 6 + delta), color='red')
 
 
 # Modify the function bodies below to be used for function value and gradient computation
@@ -129,7 +131,6 @@ def approx_grad_task1(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.
     """
     assert (len(x) == 2)
 
-    epsilon = 10**-4
     grad_1 = func([x[0] + epsilon, x[1]]) - func([x[0] - epsilon, x[1]])
     grad_2 = func([x[0], x[1] + epsilon]) - func([x[0], x[1] - epsilon])
 
@@ -150,7 +151,7 @@ def func_1a(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1a) at a given point x
         @param x Vector of size (2,)
     """
-    return x[0]**2 + 5 * x[0] - 6 * x[0] * x[1] + 9 * x[1]**2 - 15 * x[1] + 25/4
+    return x[0] ** 2 + 5 * x[0] - 6 * x[0] * x[1] + 9 * x[1] ** 2 - 15 * x[1] + 25 / 4
 
 
 def grad_1a(x: np.ndarray) -> np.ndarray:
@@ -164,35 +165,35 @@ def func_1b(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1b) at a given point x
         @param x Vector of size (2,)
     """
-    return (x[0] - 2)**2 + (x[0]*x[1]**2) - 2
+    return (x[0] - 2) ** 2 + (x[0] * x[1] ** 2) - 2
 
 
 def grad_1b(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 1b) at a given point x
         @param x Vector of size (2,)
     """
-    return [2*x[0] + x[1]**2 - 4, 2*x[0] * x[1]]
+    return [2 * x[0] + x[1] ** 2 - 4, 2 * x[0] * x[1]]
 
 
 def func_1c(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1c) at a given point x
         @param x Vector of size (2,)
     """
-    return x[0]**2 + x[0] * (x[0]**2 + x[1]**2) + (x[0]**2 + x[1]**2)
+    return x[0] ** 2 + x[0] * (x[0] ** 2 + x[1] ** 2) + (x[0] ** 2 + x[1] ** 2)
 
 
 def grad_1c(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 1c) at a given point x
         @param x Vector of size (2,)
     """
-    return [3 * x[0]**2 + 4 * x[0] + x[1]**2, 2 * x[0] * x[1] + 2 * x[1]]
+    return [3 * x[0] ** 2 + 4 * x[0] + x[1] ** 2, 2 * x[0] * x[1] + 2 * x[1]]
 
 
 def func_1d(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 1d) at a given point x
         @param x Vector of size (2,)
     """
-    return alpha * x[0]**2 - 2 * x[0] + beta * x[1]**2
+    return alpha * x[0] ** 2 - 2 * x[0] + beta * x[1] ** 2
 
 
 def grad_1d(x: np.ndarray) -> np.ndarray:
@@ -206,42 +207,42 @@ def func_2a(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 2a) at a given point x
         @param x Vector of size (n,)
     """
-    pass
+    return 1 / 4 * sum((x - b) ** 2) ** 2
 
 
 def grad_2a(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 2a) at a given point x
         @param x Vector of size (n,)
     """
-    pass
+    return (x - b) * sum((x - b) ** 2)
 
 
 def func_2b(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 2b) at a given point x
         @param x Vector of size (n,)
     """
-    pass
+    return sum(1 / 2 * np.multiply(A.dot(np.asmatrix(x).T), A.dot(np.asmatrix(x).T)) + A.dot(np.asmatrix(x).T))[0, 0]
 
 
 def grad_2b(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 2b) at a given point x
         @param x Vector of size (n,)
     """
-    pass
+    return np.asarray((A.T * (A * np.matrix(x).T + np.matrix([1, 1, 1, 1, 1]).T))).squeeze()
 
 
 def func_2c(x: np.ndarray) -> float:
     """ Computes and returns the function value for function 2c) at a given point x
         @param x Vector of size (n,)
     """
-    pass
+    return (np.asmatrix(np.divide(x, b)) * D * np.asmatrix(np.divide(x, b)).T)[0, 0]  # (x hadmard b)^T * D * (x hadmard b)
 
 
 def grad_2c(x: np.ndarray) -> np.ndarray:
     """ Computes and returns the analytical gradient result for function 2c) at a given point x
         @param x Vector of size (n,)
     """
-    pass
+    return np.asarray(np.divide((D.T + D) * np.asmatrix(np.divide(x, b)).T, np.asmatrix(b).T)).squeeze()
 
 
 def task3():
@@ -276,6 +277,44 @@ def task3():
     """ Start of your code
     """
 
+    plot_solutions_task1(ax)
+    plot_solutions_task2(ax)
+
+    """ End of your code
+    """
+    return fig
+
+
+def plot_solutions_task2(ax):
+    x = np.random.randn(5)
+
+    width = 0.3
+    del_x1_analytical = 0 - width / 2
+    del_x2_analytical = 1 - width / 2
+    del_x3_analytical = 2 - width / 2
+    del_x4_analytical = 3 - width / 2
+    del_x5_analytical = 4 - width / 2
+
+    del_x1_numerical = 0 + width / 2
+    del_x2_numerical = 1 + width / 2
+    del_x3_numerical = 2 + width / 2
+    del_x4_numerical = 3 + width / 2
+    del_x5_numerical = 4 + width / 2
+
+    analytical_bars = [del_x1_analytical, del_x2_analytical, del_x3_analytical, del_x4_analytical, del_x5_analytical]
+    numerical_bars = [del_x1_numerical, del_x2_numerical, del_x3_numerical, del_x4_numerical, del_x5_numerical]
+
+    ax[4].bar(analytical_bars, grad_2a(x), width)
+    ax[4].bar(numerical_bars, approx_fprime(x, func_2a, epsilon), width)
+
+    ax[5].bar(analytical_bars, grad_2b(x), width)
+    ax[5].bar(numerical_bars, approx_fprime(x, func_2b, epsilon), width)
+
+    ax[6].bar(analytical_bars, grad_2c(x), width)
+    ax[6].bar(numerical_bars, approx_fprime(x, func_2c, epsilon), width)
+
+
+def plot_solutions_task1(ax):
     x = np.random.randn(2)
 
     width = 0.3
@@ -297,10 +336,6 @@ def task3():
 
     ax[3].bar(analytical_bars, [grad_1d(x)[0], grad_1d(x)[1]], width)
     ax[3].bar(numerical_bars, [approx_grad_task1(func_1d, x)[0], approx_grad_task1(func_1d, x)[1]], width)
-
-    """ End of your code
-    """
-    return fig
 
 
 def task4():
