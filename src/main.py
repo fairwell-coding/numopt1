@@ -480,12 +480,12 @@ def __verify_optimization_result(M: np.matrix):
 
 
 if __name__ == '__main__':
-    # tasks = [task1, task3]
-    #
-    # pdf = PdfPages('figures.pdf')
-    # for task in tasks:
-    #     retval = task()
-    #     pdf.savefig(retval)
-    # pdf.close()
+    tasks = [task1, task3]
+
+    pdf = PdfPages('figures.pdf')
+    for task in tasks:
+        retval = task()
+        pdf.savefig(retval)
+    pdf.close()
 
     task4()
