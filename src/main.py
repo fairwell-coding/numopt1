@@ -410,7 +410,8 @@ def task4():
                        1300  # x7 + y7 = 1300
                        ])
 
-    optimization_result = linprog(c=energy, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, method='highs')
+    optimization_result = linprog(c=energy, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, method='highs')  # We are using the recommended method 'highs' which automatically chooses between 'highs-ds'
+    # and 'highs-ipm' for optimal linear solver performance since no specifics were giving in the assignment on which solver we shall use
     M = np.asmatrix([optimization_result['x'][:8], optimization_result['x'][8:]]).T
 
     __verify_optimization_result(M)
