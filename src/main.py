@@ -440,40 +440,52 @@ def __compute_total_energy_consumption(energy, optimization_result):
 
 
 def __verify_optimization_result(M: np.matrix):
-    assert M[0, 0] + M[0, 1] == np.round(1200, decimals=5)  # x0 + y0 = 1200
-    assert M[1, 0] + M[1, 1] == np.round(1500, decimals=5)  # x1 + y1 = 1500
-    assert M[2, 0] + M[2, 1] == np.round(1400, decimals=5)  # x1 + y1 = 1400
-    assert M[3, 0] + M[3, 1] == np.round(400, decimals=5)  # x1 + y1 = 400
-    assert M[4, 0] + M[4, 1] == np.round(1000, decimals=5)  # x1 + y1 = 1000
-    assert M[5, 0] + M[5, 1] == np.round(800, decimals=5)  # x1 + y1 = 800
-    assert M[6, 0] + M[6, 1] == np.round(760, decimals=5)  # x1 + y1 = 760
-    assert M[7, 0] + M[7, 1] == np.round(1300, decimals=5)  # x1 + y1 = 1300
-    assert M[0, 0] >= np.round(480, decimals=5)  # x0 >= 480
-    assert M[1, 0] >= np.round(600, decimals=5)  # x1 >= 600
-    assert M[2, 0] >= np.round(560, decimals=5)  # x2 >= 560
-    assert M[3, 0] >= np.round(0, decimals=5)  # x3 >= 0
-    assert M[4, 0] >= np.round(0, decimals=5)  # x4 >= 0
-    assert M[5, 0] >= np.round(0, decimals=5)  # x5 >= 0
-    assert M[6, 0] >= np.round(0, decimals=5)  # x6 >= 0
-    assert M[7, 0] >= np.round(0, decimals=5)  # x7 >= 0
-    assert M[0, 1] >= np.round(0, decimals=5)  # y1 >= 0
-    assert M[2, 1] >= np.round(0, decimals=5)  # y2 >= 0
-    assert M[3, 1] >= np.round(0, decimals=5)  # y3 >= 0
-    assert M[4, 1] >= np.round(0, decimals=5)  # y4 >= 0
-    assert M[5, 1] >= np.round(0, decimals=5)  # y5 >= 0
-    assert M[6, 1] >= np.round(0, decimals=5)  # y6 >= 0
-    assert M[7, 1] >= np.round(0, decimals=5)  # y7 >= 0
-    assert M[0, 0] + M[1, 0] + M[2, 0] + M[3, 0] + M[4, 0] + M[5, 0] + M[6, 0] + M[7, 0] <= np.round(4500, decimals=5)  # x0 + .. + x7 <= 4500
-    assert M[0, 1] + M[1, 1] + M[2, 1] + M[3, 1] + M[4, 1] + M[5, 1] + M[6, 1] + M[7, 1] <= np.round(4500, decimals=5)  # y0 + .. + y7 <= 4500
+    float_rounding_accuracy = 5  # Since the output of the linprog-solver returns float values, we need to perform the verification of the optimization results by defining a reasonable accuracy
+    # interval and compare the rounded values instead
+
+    # Constraints for #instructions on CPU & GPU
+    assert np.round(M[0, 0] + M[0, 1], decimals=float_rounding_accuracy) == 1200  # x0 + y0 = 1200
+    assert np.round(M[1, 0] + M[1, 1], decimals=float_rounding_accuracy) == 1500  # x1 + y1 = 1500
+    assert np.round(M[2, 0] + M[2, 1], decimals=float_rounding_accuracy) == 1400  # x2 + y2 = 1400
+    assert np.round(M[3, 0] + M[3, 1], decimals=float_rounding_accuracy) == 400  # x3 + y3 = 400
+    assert np.round(M[4, 0] + M[4, 1], decimals=float_rounding_accuracy) == 1000  # x4 + y4 = 1000
+    assert np.round(M[5, 0] + M[5, 1], decimals=float_rounding_accuracy) == 800  # x5 + y5 = 800
+    assert np.round(M[6, 0] + M[6, 1], decimals=float_rounding_accuracy) == 760  # x6 + y6 = 760
+    assert np.round(M[7, 0] + M[7, 1], decimals=float_rounding_accuracy) == 1300  # x7 + 7 = 1300
+
+    # At least 40% of the instructions of processes P0, P1 and P2 need to be executed on CPU
+    assert np.round(M[0, 0], decimals=float_rounding_accuracy) >= 480  # x0 >= 480
+    assert np.round(M[1, 0], decimals=float_rounding_accuracy) >= 600  # x1 >= 600
+    assert np.round(M[2, 0], decimals=float_rounding_accuracy) >= 560  # x2 >= 560
+
+    # Only a positive number of instructions can be executed (physically impossible to perform negative instructions), x0, x1 and x2 are already constricted by the 40% constraints above and hence
+    # may be omitted here due to redundancy
+    assert np.round(M[3, 0], decimals=float_rounding_accuracy) >= 0  # x3 >= 0
+    assert np.round(M[4, 0], decimals=float_rounding_accuracy) >= 0  # x4 >= 0
+    assert np.round(M[5, 0], decimals=float_rounding_accuracy) >= 0  # x5 >= 0
+    assert np.round(M[6, 0], decimals=float_rounding_accuracy) >= 0  # x6 >= 0
+    assert np.round(M[7, 0], decimals=float_rounding_accuracy) >= 0  # x7 >= 0
+    assert np.round(M[0, 1], decimals=float_rounding_accuracy) >= 0  # y0 >= 0
+    assert np.round(M[1, 1], decimals=float_rounding_accuracy) >= 0  # y1 >= 0
+    assert np.round(M[2, 1], decimals=float_rounding_accuracy) >= 0  # y2 >= 0
+    assert np.round(M[3, 1], decimals=float_rounding_accuracy) >= 0  # y3 >= 0
+    assert np.round(M[4, 1], decimals=float_rounding_accuracy) >= 0  # y4 >= 0
+    assert np.round(M[5, 1], decimals=float_rounding_accuracy) >= 0  # y5 >= 0
+    assert np.round(M[6, 1], decimals=float_rounding_accuracy) >= 0  # y6 >= 0
+    assert np.round(M[7, 1], decimals=float_rounding_accuracy) >= 0  # y7 >= 0
+
+    # Both PUs are limited to a maximum of 4500 instructions
+    assert np.round(M[0, 0] + M[1, 0] + M[2, 0] + M[3, 0] + M[4, 0] + M[5, 0] + M[6, 0] + M[7, 0], decimals=float_rounding_accuracy) <= 4500  # x0 + .. + x7 <= 4500
+    assert np.round(M[0, 1] + M[1, 1] + M[2, 1] + M[3, 1] + M[4, 1] + M[5, 1] + M[6, 1] + M[7, 1], decimals=float_rounding_accuracy) <= 4500  # y0 + .. + y7 <= 4500
 
 
 if __name__ == '__main__':
-    tasks = [task1, task3]
-
-    pdf = PdfPages('figures.pdf')
-    for task in tasks:
-        retval = task()
-        pdf.savefig(retval)
-    pdf.close()
+    # tasks = [task1, task3]
+    #
+    # pdf = PdfPages('figures.pdf')
+    # for task in tasks:
+    #     retval = task()
+    #     pdf.savefig(retval)
+    # pdf.close()
 
     task4()
