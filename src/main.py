@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.optimize import approx_fprime, linprog
-from typing import Callable
+from typing import Callable, Dict, List
 
 # Modify the following global variables to be used in your functions
 """ Start of your code
@@ -75,14 +75,14 @@ def task1():
     return fig
 
 
-def __plot_1d(ax, x1, x2):
+def __plot_1d(ax: List[str], x1: float, x2: float) -> None:
     ax[1, 1].contour(x1, x2, alpha * x1 ** 2 - 2 * x1 + beta * x2 ** 2, 50)
     ax[1, 1].plot(1 / alpha, 0, color='red', marker="x", markersize=8)
     delta = 0.2
     ax[1, 1].annotate("P(1/alpha| 0)", (0 + delta, 0 + delta), color='red')
 
 
-def __plot_1c(ax, x1, x2):
+def __plot_1c(ax: List[str], x1: float, x2: float) -> None:
     ax[1, 0].contour(x1, x2, x1 ** 2 + x1 * (x1 ** 2 + x2 ** 2) ** 0.5 + (x1 ** 2 + x2 ** 2) ** 0.5, 50)
     delta = 0.2
 
@@ -96,7 +96,7 @@ def __plot_1c(ax, x1, x2):
     ax[1, 0].annotate("P3(0|0) = local minima", (0 + delta, 0 + delta), color='red')
 
 
-def __plot_1b(ax, x1, x2):
+def __plot_1b(ax: List[str], x1: float, x2: float) -> None:
     ax[0, 1].contour(x1, x2, (x1 - 2) ** 2 + x1 * x2 ** 2 - 2, 50)
 
     delta = 0.2
@@ -111,7 +111,7 @@ def __plot_1b(ax, x1, x2):
     ax[0, 1].annotate("P3(0|-2)", (0 + delta, -2 + delta), color='red')
 
 
-def __plot_1a(ax, x1, x2):
+def __plot_1a(ax: List[str], x1: float, x2: float) -> None:
     ax[0, 0].contour(x1, x2, (-x1 + 3 * x2 - 2.5) ** 2, 50)
     # The critical point is undefined (det(Hessian) = 0). The solution of the respective linear system has one degree of freedom, hence for the critical point we get the line: x2 = x1/3 + 5/6
     x = np.linspace(-5, 5)
@@ -129,7 +129,7 @@ def approx_grad_task1(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.
         using the given central differences formulation for 2D functions. (Task1 functions)
         @return The gradient approximation
     """
-    assert (len(x) == 2)
+    assert (len(x) == 2)  # ensure that the vector x is element of R^2 since the mathematical calculations are based on R^2
 
     grad_1 = func([x[0] + epsilon, x[1]]) - func([x[0] - epsilon, x[1]])
     grad_2 = func([x[0], x[1] + epsilon]) - func([x[0], x[1] - epsilon])
@@ -285,7 +285,7 @@ def task3():
     return fig
 
 
-def __plot_solutions_task2(ax):
+def __plot_solutions_task2(ax: List[str]) -> None:
     x = np.random.randn(5)
 
     width = 0.3
@@ -314,8 +314,8 @@ def __plot_solutions_task2(ax):
     ax[6].bar(numerical_bars, approx_fprime(x, func_2c, epsilon), width)
 
 
-def __plot_solutions_task1(ax):
-    x = np.random.randn(2)
+def __plot_solutions_task1(ax: List[str]) -> None:
+    x = np.random.randn(2)  # We calculate the gradient vector each time at a different position in our function (used for both analytical calculation and numerical approximation)
 
     width = 0.3
     del_x1_analytical = 0 - width / 2
@@ -348,7 +348,7 @@ def task4():
 
     cpu = np.asarray([0.11, 0.13, 0.09, 0.12, 0.15, 0.14, 0.11, 0.12])
     gpu = np.asarray([0.10, 0.13, 0.08, 0.13, 0.14, 0.14, 0.09, 0.13])
-    energy = np.concatenate([cpu, gpu])
+    energy = np.concatenate([cpu, gpu])  # constraint vector c
 
     A_ub = np.asarray([[0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # -x3 <= 0
                        [0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],  # -x4 <= 0
@@ -422,7 +422,7 @@ def task4():
     return M
 
 
-def __find_optimal_result_for_task_g_constraints(A_eq, A_ub, b_eq, b_ub, energy):
+def __find_optimal_result_for_task_g_constraints(A_eq: np.ndarray, A_ub: np.ndarray, b_eq: np.ndarray, b_ub: np.ndarray, energy: np.ndarray) -> None:
     b_ub[13] = -1200
     b_ub[14] = -1500
     b_ub[15] = -1400
@@ -435,11 +435,11 @@ def __find_optimal_result_for_task_g_constraints(A_eq, A_ub, b_eq, b_ub, energy)
     # computed without modifying the constraints.
 
 
-def __compute_total_energy_consumption(energy, optimization_result):
+def __compute_total_energy_consumption(energy: np.ndarray, optimization_result: Dict[str, any]) -> None:
     print('The total energy consumption for the computed scheduling plan is {} uWh.'.format(sum(energy * optimization_result['x'])))
 
 
-def __verify_optimization_result(M: np.matrix):
+def __verify_optimization_result(M: np.matrix) -> None:
     float_rounding_accuracy = 5  # Since the output of the linprog-solver returns float values, we need to perform the verification of the optimization results by defining a reasonable accuracy
     # interval and compare the rounded values instead
 
