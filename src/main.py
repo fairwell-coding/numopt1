@@ -144,7 +144,7 @@ def approx_grad_task2(func: Callable[[np.ndarray], float], x: np.ndarray) -> np.
         using scipy.optimize.approx_fprime(). (Task2 functions)
         @return The gradient approximation
     """
-    pass
+    return approx_fprime(x, func, epsilon)
 
 
 def func_1a(x: np.ndarray) -> float:
@@ -305,13 +305,13 @@ def __plot_solutions_task2(ax: List[str]) -> None:
     numerical_bars = [del_x1_numerical, del_x2_numerical, del_x3_numerical, del_x4_numerical, del_x5_numerical]
 
     ax[4].bar(analytical_bars, grad_2a(x), width)
-    ax[4].bar(numerical_bars, approx_fprime(x, func_2a, epsilon), width)
+    ax[4].bar(numerical_bars, approx_grad_task2(func_2a, x), width)
 
     ax[5].bar(analytical_bars, grad_2b(x), width)
-    ax[5].bar(numerical_bars, approx_fprime(x, func_2b, epsilon), width)
+    ax[5].bar(numerical_bars, approx_grad_task2(func_2b, x), width)
 
     ax[6].bar(analytical_bars, grad_2c(x), width)
-    ax[6].bar(numerical_bars, approx_fprime(x, func_2c, epsilon), width)
+    ax[6].bar(numerical_bars, approx_grad_task2(func_2c, x), width)
 
 
 def __plot_solutions_task1(ax: List[str]) -> None:
