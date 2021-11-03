@@ -425,9 +425,6 @@ def task4():
     return M
 
 
-
-
-
 def __find_optimal_result_for_task_g_constraints(A_eq: np.ndarray, A_ub: np.ndarray, b_eq: np.ndarray, b_ub: np.ndarray, energy: np.ndarray) -> None:
     b_ub[13] = -1200
     b_ub[14] = -1500
