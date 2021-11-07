@@ -95,6 +95,9 @@ def __plot_1c(ax: List[str], x1: float, x2: float) -> None:
     ax[1, 0].plot(0, 0, color='red', marker="x", markersize=8)
     ax[1, 0].annotate("P3(0|0) = local minima", (0 + delta, 0 + delta), color='red')
 
+    ax[1, 0].plot(-4/3, 0, color='red', marker="x", markersize=8)
+    ax[1, 0].annotate("P4(-4/3|0) = local maxima", (-5 + delta, 0 + delta), color='red')
+
 
 def __plot_1b(ax: List[str], x1: float, x2: float) -> None:
     ax[0, 1].contour(x1, x2, (x1 - 2) ** 2 + x1 * x2 ** 2 - 2, 50)
